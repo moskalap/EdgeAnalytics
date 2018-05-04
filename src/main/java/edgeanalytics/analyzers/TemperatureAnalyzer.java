@@ -22,7 +22,7 @@ public class TemperatureAnalyzer {
         TStream<Double> distanceReadings = device.topology().poll(new TemperatureSensor(), 100, TimeUnit.MILLISECONDS);
         //distanceReadings.print();
         distanceReadings = distanceReadings.
-                filter(j -> Math.abs(j-this.lastTemp) > 0.25)
+                filter(j -> Math.abs(j-this.lastTemp) > 0.75)
                 .peek(j -> this.lastTemp = j);
 
 
@@ -32,7 +32,7 @@ public class TemperatureAnalyzer {
             j.addProperty("temperature", v);
             return j;
         });
-        distanceReadings.print();
+        //distanceReadings.print();
         TWindow<JsonObject,JsonElement> sensorWindow = sensorJSON.last(10, j -> j.get("name"));
         sensorJSON = JsonAnalytics.aggregate(sensorWindow, "name", "temperature", MIN, MAX, MEAN, STDDEV);
         sensorJSON.print();

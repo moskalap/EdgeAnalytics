@@ -18,7 +18,7 @@ public class TemperatureSensor implements Supplier {
             }
 
         }
-        System.out.print("sensor" + temp);
+        System.out.println("\tsensor " + temp);
         return temp;
     }
 }
