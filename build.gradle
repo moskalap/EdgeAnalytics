@@ -1,6 +1,6 @@
 group 'pl.edu.agh.iot'
 version '1.0-SNAPSHOT'
-apply plugin: 'application'
+apply plugin: 'application'git
 
 mainClassName = 'edgeanalytics.Main'
 apply plugin: 'java'
@@ -13,5 +13,12 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.apache.edgent', name: 'edgent-parent', version: '1.2.0', ext: 'pom'
+    compile group: 'org.apache.edgent', name: 'edgent-providers-direct', version: '1.2.0'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors', version: '1.2.0', ext: 'pom'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors-iotp', version: '1.2.0', ext: 'pom'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors-iot', version: '1.2.0', ext: 'pom'
+    compile group: 'org.apache.edgent', name: 'edgent-providers-iot', version: '1.2.0', ext: 'pom'
+    compile group: 'org.apache.edgent', name: 'edgent-providers-development', version: '1.2.0', ext: 'pom'
+
+
 }
