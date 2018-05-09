@@ -3,7 +3,7 @@ package edgeanalytics.sensors;
 import org.apache.edgent.function.Supplier;
 
 public class SunLightSensor implements Supplier {
-    private int intensity = 32768;
+    private int intensity = 14000;
     private final int maxIntensity = 65535;
     private final int minIntensity = 1;
 

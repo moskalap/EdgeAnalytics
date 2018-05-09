@@ -18,10 +18,10 @@ public class SunLightAnalyzer {
 
     public SunLightAnalyzer(IotDevice device) {
 
-        TStream<Integer> distanceReadings = device.topology().poll(new SunLightSensor(), 100, TimeUnit.MILLISECONDS);
+        TStream<Integer> distanceReadings = device.topology().poll(new SunLightSensor(), 2000, TimeUnit.MILLISECONDS);
 
         distanceReadings = distanceReadings
-                .filter(j -> Math.abs(j - this.lightIntensity) > 10)
+                .filter(j -> Math.abs(j - this.lightIntensity) > 5)
                 .peek(j -> this.lightIntensity = j);
 
         TStream<JsonObject> sensorJSON = distanceReadings.map(i -> {
@@ -31,9 +31,10 @@ public class SunLightAnalyzer {
             return j;
         });
 
-        TWindow<JsonObject, JsonElement> sensorWindow = sensorJSON.last(10, j -> j.get("name"));
+        TWindow<JsonObject, JsonElement> sensorWindow = sensorJSON.last(5, TimeUnit.MINUTES, j -> j.get("name"));
         sensorJSON = JsonAnalytics.aggregate(sensorWindow, "name", "intensity", MIN, MAX, MEAN, STDDEV);
         sensorJSON.print();
+        sensorJSON.peek(j->j.addProperty("current", this.lightIntensity));
         device.events(sensorJSON, "sensors", QoS.FIRE_AND_FORGET);
 
     }
