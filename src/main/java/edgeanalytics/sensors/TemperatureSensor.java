@@ -10,15 +10,15 @@ public class TemperatureSensor implements Supplier {
 
     @Override
     public Object get() {
-        if(rand.nextDouble() > 0.9){
+        if(rand.nextDouble() > 0.2){
             if(rand.nextBoolean()){
-                temp += rand.nextDouble();
+                temp += rand.nextDouble()*0.5d;
             }else{
-                temp -= rand.nextDouble();
+                temp -= rand.nextDouble()*0.5d;
             }
 
         }
-        System.out.println("\tsensor " + temp);
+        System.out.println("\tsensor: " + temp);
         return temp;
     }
 }

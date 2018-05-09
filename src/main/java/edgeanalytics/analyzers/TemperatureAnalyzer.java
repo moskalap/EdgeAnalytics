@@ -20,10 +20,10 @@ public class TemperatureAnalyzer {
 
     public TemperatureAnalyzer(IotDevice device){
         TStream<Double> distanceReadings = device.topology().poll(new TemperatureSensor(), 100, TimeUnit.MILLISECONDS);
-        //distanceReadings.print();
         distanceReadings = distanceReadings.
-                filter(j -> Math.abs(j-this.lastTemp) > 0.75)
-                .peek(j -> this.lastTemp = j);
+                filter(j -> Math.abs(j-this.lastTemp) > 0.5)
+                .peek(j -> this.lastTemp = j)
+                .peek(j->  System.out.println("\t\tCHANGE "+j));
 
 
         TStream<JsonObject> sensorJSON = distanceReadings.map(v -> {
@@ -32,10 +32,11 @@ public class TemperatureAnalyzer {
             j.addProperty("temperature", v);
             return j;
         });
-        //distanceReadings.print();
-        TWindow<JsonObject,JsonElement> sensorWindow = sensorJSON.last(10, j -> j.get("name"));
+        TWindow<JsonObject,JsonElement> sensorWindow = sensorJSON.last(5,TimeUnit.MINUTES, j -> j.get("name"));
         sensorJSON = JsonAnalytics.aggregate(sensorWindow, "name", "temperature", MIN, MAX, MEAN, STDDEV);
         sensorJSON.print();
+        sensorJSON.peek(j->j.addProperty("actual", this.lastTemp));
+
         device.events(sensorJSON, "sensors", QoS.FIRE_AND_FORGET);
 
 
