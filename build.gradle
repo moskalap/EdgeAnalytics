@@ -10,7 +10,7 @@ sourceCompatibility = 1.8
 sourceSets {
     main {
         java {
-            srcDirs= ["src/main/java"]
+            srcDirs= ["src/main/java","src/main/resources"]
         }
         resources {
             srcDirs= ["src/main/resources"]
@@ -20,6 +20,20 @@ sourceSets {
 
 repositories {
     mavenCentral()
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'edgeanalytics.Main'
+    }
+
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }{
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    }
+    with jar
 }
 
 dependencies {

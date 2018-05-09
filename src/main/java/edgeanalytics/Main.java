@@ -18,7 +18,9 @@ public class Main {
 
         DirectProvider dp = new DirectProvider();
         DirectTopology topology = dp.newTopology();
-        IotDevice device = new IotpDevice(topology, new File(ClassLoader.getSystemClassLoader().getResource("device.cfg").getFile()));
+        String confFilePath = args.length == 1? args[0]:ClassLoader.getSystemClassLoader().getResource("device.cfg").getFile();
+        System.out.println("Configuration file path: "+confFilePath);
+        IotDevice device = new IotpDevice(topology, new File(confFilePath));
         new TemperatureAnalyzer(device);
         new MoistureAnalyzer(device);
         new SunLightAnalyzer(device);
