@@ -2,11 +2,10 @@ package edgeanalytics.analyzers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import edgeanalytics.sensors.TemperatureSensor;
+import edgeanalytics.sensors.MyTemperatureSensor;
 import org.apache.edgent.analytics.math3.json.JsonAnalytics;
 import org.apache.edgent.connectors.iot.IotDevice;
 import org.apache.edgent.connectors.iot.QoS;
-import org.apache.edgent.providers.direct.DirectTopology;
 import org.apache.edgent.topology.TStream;
 import org.apache.edgent.topology.TWindow;
 
@@ -19,7 +18,7 @@ public class TemperatureAnalyzer {
     private double lastTemp =0;
 
     public TemperatureAnalyzer(IotDevice device){
-        TStream<Double> distanceReadings = device.topology().poll(new TemperatureSensor(), 100, TimeUnit.MILLISECONDS);
+        TStream<Double> distanceReadings = device.topology().poll(new MyTemperatureSensor(), 100, TimeUnit.MILLISECONDS);
         distanceReadings = distanceReadings.
                 filter(j -> Math.abs(j-this.lastTemp) > 0.5)
                 .peek(j -> this.lastTemp = j)
