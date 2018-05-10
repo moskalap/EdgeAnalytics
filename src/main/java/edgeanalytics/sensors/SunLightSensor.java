@@ -15,7 +15,7 @@ public class SunLightSensor implements Supplier {
     private boolean random;
     private I2CDevice device;
 
-    SunLightSensor(){
+    public SunLightSensor(){
         I2CBus bus = null;
         try {
             bus = I2CFactory.getInstance(I2CBus.BUS_1);
