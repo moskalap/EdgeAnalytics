@@ -18,12 +18,17 @@ public class SunLightSensor implements Supplier {
     public SunLightSensor(){
         I2CBus bus = null;
         try {
+            System.out.println("1");
             bus = I2CFactory.getInstance(I2CBus.BUS_1);
+            System.out.println("2");
             device = bus.getDevice(0x23);
+            System.out.println("3");
             if(device!= null){
                 this.random=false;
+                System.out.println("4");
             }else{
                 this.random=true;
+                System.out.println("5");
             }
         } catch (I2CFactory.UnsupportedBusNumberException e) {
             e.printStackTrace();
