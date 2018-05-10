@@ -17,7 +17,7 @@ public class MoistureAnalyzer {
     private int moisture = 800;
 
     public MoistureAnalyzer(IotDevice device) {
-        TStream<Integer> moistureReadings = device.topology().poll(new MoistureSensor(), 100, TimeUnit.SECONDS);
+        TStream<Integer> moistureReadings = device.topology().poll(new MoistureSensor(), 1, TimeUnit.SECONDS);
 
         moistureReadings = moistureReadings
                 .filter(x -> x < 100)
@@ -26,11 +26,11 @@ public class MoistureAnalyzer {
         TStream<JsonObject> sensorJSON = moistureReadings.map(v -> {
                     JsonObject j = new JsonObject();
                     j.addProperty("name", "moistureSensor");
-                    j.addProperty("reading", v);
+                    j.addProperty("moisture", v);
                     return j;
                 });
         TWindow<JsonObject, JsonElement> sensorWindow = sensorJSON.last(10, j -> j.get("name"));
-        sensorJSON = JsonAnalytics.aggregate(sensorWindow, "name", "reading", MIN, MAX, MEAN, STDDEV);
+        sensorJSON = JsonAnalytics.aggregate(sensorWindow, "name", "moisture", MIN, MAX, MEAN, STDDEV);
         //sensorJSON = sensorJSON.filter(j -> j.get("reading").getAsInt() < 100);
         sensorJSON.print();
         device.events(sensorJSON, "sensors", QoS.FIRE_AND_FORGET);
