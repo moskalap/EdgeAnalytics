@@ -3,15 +3,12 @@ package edgeanalytics;
 import edgeanalytics.analyzers.MoistureAnalyzer;
 import edgeanalytics.analyzers.SunLightAnalyzer;
 import edgeanalytics.analyzers.TemperatureAnalyzer;
-import edgeanalytics.sensors.TemperatureSensor;
 import org.apache.edgent.connectors.iot.IotDevice;
 import org.apache.edgent.providers.direct.DirectProvider;
 import org.apache.edgent.providers.direct.DirectTopology;
-import org.apache.edgent.topology.TStream;
 import org.apache.edgent.connectors.iotp.IotpDevice;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args){
