@@ -40,7 +40,10 @@ public class MyTemperatureSensor implements Supplier {
             System.out.println("\tsensor: " + temp);
             return temp;
         }else{
-            return sensor.getTemperature();
+
+            temp = sensor.getTemperature();
+            System.out.println("\tsensor: " + temp);
+            return temp;
         }
 
     }
