@@ -55,7 +55,9 @@ public class SunLightSensor implements Supplier {
 
             int r;
             try {
+
                 r = device.read(p, 0, 2);
+                System.out.println("read: "+r);
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
