@@ -18,7 +18,7 @@ public class TemperatureAnalyzer {
     private double lastTemp =0;
 
     public TemperatureAnalyzer(IotDevice device){
-        TStream<Double> distanceReadings = device.topology().poll(new MyTemperatureSensor(), 100, TimeUnit.MILLISECONDS);
+        TStream<Double> distanceReadings = device.topology().poll(new MyTemperatureSensor(), 1000, TimeUnit.MILLISECONDS);
         distanceReadings = distanceReadings.
                 filter(j -> Math.abs(j-this.lastTemp) > 0.5)
                 .peek(j -> this.lastTemp = j)

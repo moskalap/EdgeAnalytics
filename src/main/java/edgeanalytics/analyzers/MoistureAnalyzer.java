@@ -17,7 +17,7 @@ public class MoistureAnalyzer {
     private int moisture = 800;
 
     public MoistureAnalyzer(IotDevice device) {
-        TStream<Integer> moistureReadings = device.topology().poll(new MoistureSensor(), 100, TimeUnit.MILLISECONDS);
+        TStream<Integer> moistureReadings = device.topology().poll(new MoistureSensor(), 100, TimeUnit.SECONDS);
 
         moistureReadings = moistureReadings
                 .filter(x -> x < 100)

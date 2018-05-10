@@ -18,7 +18,7 @@ public class SunLightAnalyzer {
 
     public SunLightAnalyzer(IotDevice device) {
 
-        TStream<Integer> distanceReadings = device.topology().poll(new SunLightSensor(), 2000, TimeUnit.MILLISECONDS);
+        TStream<Integer> distanceReadings = device.topology().poll(new SunLightSensor(), 5000, TimeUnit.MILLISECONDS);
 
         distanceReadings = distanceReadings
                 .filter(j -> Math.abs(j - this.lightIntensity) > 5)
