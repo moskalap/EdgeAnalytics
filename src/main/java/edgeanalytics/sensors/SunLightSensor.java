@@ -24,6 +24,7 @@ public class SunLightSensor implements Supplier {
             device = bus.getDevice(0x23);
             System.out.println("3");
             if(device!= null){
+                System.out.println(device.getAddress());
                 this.random=false;
                 System.out.println("4");
             }else{

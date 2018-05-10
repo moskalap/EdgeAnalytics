@@ -18,8 +18,8 @@ public class Main {
         String confFilePath = args.length == 1? args[0]:ClassLoader.getSystemClassLoader().getResource("device.cfg").getFile();
         System.out.println("Configuration file path: "+confFilePath);
         IotDevice device = new IotpDevice(topology, new File(confFilePath));
-        new TemperatureAnalyzer(device);
-        new MoistureAnalyzer(device);
+        //new TemperatureAnalyzer(device);
+       // new MoistureAnalyzer(device);
         new SunLightAnalyzer(device);
         dp.submit(topology);
 
