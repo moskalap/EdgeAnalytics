@@ -5,7 +5,9 @@ import org.apache.edgent.function.Supplier;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
 public class SunLightSensor implements Supplier {
@@ -16,34 +18,14 @@ public class SunLightSensor implements Supplier {
     private I2CDevice device;
 
     public SunLightSensor(){
-        I2CBus bus = null;
-        try {
-            System.out.println("1");
-            bus = I2CFactory.getInstance(I2CBus.BUS_1);
-
-            System.out.println("2");
-            device = bus.getDevice(0x23);
-            System.out.println("3");
-            if(device!= null){
-                System.out.println(device.getAddress());
-                this.random=false;
-                System.out.println("4");
-            }else{
-                this.random=true;
-                System.out.println("5");
-            }
-        } catch (I2CFactory.UnsupportedBusNumberException e) {
-            e.printStackTrace();
-            this.random = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       this.random =false;
 
 
     }
 
     @Override
     public Object get() {
+
         if(this.random){
             if (Math.random() > 0.8) {
                 int change = (int) (Math.random() * 10);
@@ -60,23 +42,31 @@ public class SunLightSensor implements Supplier {
             System.out.println("random light:\t" + intensity);
             return intensity;
         }else{
-            byte[] p = new byte[2];
+            String pythonScriptPath = "/home/pi/projects/sensor.py";
+            String[] cmd = new String[2];
+            cmd[0] = "python"; // check version of installed python: python -V
+            cmd[1] = pythonScriptPath;
 
-            int r;
+// create runtime to execute external command
+            Runtime rt = Runtime.getRuntime();
+            Process pr = null;
             try {
-
-                r = device.read(0x23,p, 0, 2);
-                System.out.println("read: "+r);
+                pr = rt.exec(cmd);
             } catch (IOException e) {
-                throw new IllegalStateException(e);
+                e.printStackTrace();
             }
 
-            if (r != 2) {
-                throw new IllegalStateException("Read Error; r=" + r);
+// retrieve output from python script
+            BufferedReader bfr = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+            String line = "";
+            try {
+                String s = bfr.readLine();
+                System.out.println("RED: "+s);
+                return Integer.parseInt(s);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            intensity = new BigDecimal((p[0] << 8) | p[1]).intValue();
-            System.out.println("light:\t" + intensity);
-            return intensity;
+            return 0;
         }
         
     
