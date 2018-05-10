@@ -61,8 +61,10 @@ public class SunLightSensor implements Supplier {
             String line = "";
             try {
                 String s = bfr.readLine();
+
                 System.out.println("RED: "+s);
-                return Integer.parseInt(s);
+                bfr.close();
+                return (int) Float.parseFloat(s);
             } catch (IOException e) {
                 e.printStackTrace();
             }
