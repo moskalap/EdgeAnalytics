@@ -20,6 +20,7 @@ public class SunLightSensor implements Supplier {
         try {
             System.out.println("1");
             bus = I2CFactory.getInstance(I2CBus.BUS_1);
+
             System.out.println("2");
             device = bus.getDevice(0x23);
             System.out.println("3");
@@ -64,7 +65,7 @@ public class SunLightSensor implements Supplier {
             int r;
             try {
 
-                r = device.read(p, 0, 2);
+                r = device.read(0x23,p, 0, 2);
                 System.out.println("read: "+r);
             } catch (IOException e) {
                 throw new IllegalStateException(e);
