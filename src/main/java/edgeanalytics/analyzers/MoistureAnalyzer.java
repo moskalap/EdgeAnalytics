@@ -20,7 +20,7 @@ public class MoistureAnalyzer {
         TStream<Integer> moistureReadings = device.topology().poll(new MoistureSensor(), 1, TimeUnit.SECONDS);
 
         moistureReadings = moistureReadings
-                .filter(x -> x < 100)
+                .filter(x -> Math.abs(x-moisture) > 100)
                 .peek(x -> this.moisture = x);
 
         TStream<JsonObject> sensorJSON = moistureReadings.map(v -> {
