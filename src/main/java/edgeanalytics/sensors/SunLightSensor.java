@@ -20,8 +20,12 @@ public class SunLightSensor implements Supplier {
         try {
             bus = I2CFactory.getInstance(I2CBus.BUS_1);
             device = bus.getDevice(0x23);
+            if(device!= null){
+                this.random=false;
+            }
         } catch (I2CFactory.UnsupportedBusNumberException e) {
             e.printStackTrace();
+            this.random = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,7 +48,7 @@ public class SunLightSensor implements Supplier {
             else if (intensity > maxIntensity)
                 intensity = maxIntensity;
 
-            System.out.println("light:\t" + intensity);
+            System.out.println("random light:\t" + intensity);
             return intensity;
         }else{
             byte[] p = new byte[2];
@@ -59,7 +63,9 @@ public class SunLightSensor implements Supplier {
             if (r != 2) {
                 throw new IllegalStateException("Read Error; r=" + r);
             }
-            return new BigDecimal((p[0] << 8) | p[1]).intValue();
+            intensity = new BigDecimal((p[0] << 8) | p[1]).intValue();
+            System.out.println("light:\t" + intensity);
+            return intensity;
         }
         
     
