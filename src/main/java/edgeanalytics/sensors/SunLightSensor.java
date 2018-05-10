@@ -22,6 +22,8 @@ public class SunLightSensor implements Supplier {
             device = bus.getDevice(0x23);
             if(device!= null){
                 this.random=false;
+            }else{
+                this.random=true;
             }
         } catch (I2CFactory.UnsupportedBusNumberException e) {
             e.printStackTrace();
