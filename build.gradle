@@ -7,11 +7,58 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
+sourceSets {
+    main {
+        java {
+            srcDirs= ["src/main/java","src/main/resources"]
+        }
+        resources {
+            srcDirs= ["src/main/resources"]
+        }
+    }
+}
+
 repositories {
     mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'edgeanalytics.Main'
+    }
+
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }{
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    }
+    with jar
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.apache.edgent', name: 'edgent-parent', version: '1.2.0', ext: 'pom'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors-common', version: '1.2.0'
+    compile group: 'org.apache.edgent', name: 'edgent-providers-direct', version: '1.2.0'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors', version: '1.2.0'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors-iotp', version: '1.2.0'
+    compile group: 'org.apache.edgent', name: 'edgent-connectors-iot', version: '1.2.0'
+    // https://mvnrepository.com/artifact/com.pi4j/pi4j-core
+    compile 'com.pi4j:pi4j-core:1.1'
+    compile 'com.pi4j:pi4j-device:1.1'
+    compile group: 'com.pi4j', name: 'pi4j-gpio-extension', version: '1.1'
+
+
+    compile group: 'org.apache.edgent', name: 'edgent-providers-development', version: '1.2.0'
+
+    compile group: 'org.apache.edgent', name: 'edgent-analytics-sensors', version: '1.2.0'
+    // https://mvnrepository.com/artifact/org.apache.edgent/edgent-analytics-math3
+    compile group: 'org.apache.edgent', name: 'edgent-analytics-math3', version: '1.2.0'
+
+
+
+
 }
